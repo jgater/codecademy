@@ -1,4 +1,4 @@
-#Codecademy work in progress
+#Codecademy
 
 ##About
 
