@@ -1,24 +1,16 @@
     
 // create necessary classes
 
-    // the ArrayOfCards class holds an array of cards, and the methods to access them
-
+    // the ArrayOfCards class holds the methods to access an array of cards (a superclass)
     // the DeckOfCards class contains our playing deck of standard playing cards, it is a subclass of ArrayOfCards
-
     // the Hand class contains the cards for a single player, it is a subclass of ArrayOfCards
-
-    // the PlayerHands class contains Hands
+    // the PlayerHands class contains Hand objects
 
     
     function ArrayOfCards() {
-        this.cards = [];
         var acard;
         this.addCard = function (acard) { this.cards.push(acard); };
-        this.removeCard = function () { 
-            acard = this.cards.pop();
-            console.log(acard.getNumber());
-            return acard;
-        };
+        this.removeCard = function () { return this.cards.pop(); };
         this.showAllCards = function () { return this.cards; };
         this.empty = function () { this.cards = []; };
     }
@@ -26,6 +18,7 @@
     
     function DeckOfCards() {
         var tmp, i, j, k, n;
+        this.cards=[];
         this.shuffle = function () {
             for ( i = this.cards.length - 1 ; i ; i-- ) {
                 j = Math.floor(Math.random() * (i + 1));
@@ -45,6 +38,7 @@
     DeckOfCards.prototype = new ArrayOfCards();
 
     function Hand(name) {
+        this.cards = [];
         this.playerName = name;
         this.getScore = function () {
             var score = 0;
@@ -67,8 +61,6 @@
         this.hands = [];
         this.addPlayer = function (name) { this.hands.push( new Hand(name) ) };
     }
-
-    
 
     function Card(s,n){
         this.acesHigh = true;
@@ -106,54 +98,34 @@
     // Add a single x52 deck of cards to it
     blackjackDeck.addDeck(1);
 
-    // test code to confirm deck has been created properly
-    //var mytestarray = blackjackDeck.showAllCards(); 
-    //for (card in mytestarray) {
-    //    console.log(mytestarray[card].getNumber() + " of " + mytestarray[card].getSuit() );
-    //}
-
     // and shuffle them
     blackjackDeck.shuffle();
 
-    // test code to confirm cards have been shuffled
-    //var mytestarray = blackjackDeck.showAllCards(); 
-    //for (card in mytestarray) {
-    //    console.log(mytestarray[card].getNumber() + " of " + mytestarray[card].getSuit() );
-    //}
-
     //Let's make it two player 
-    //var blackjackHands = new PlayerHands ();
-    //blackjackHands.addPlayer("Dealer");
+    var blackjackHands = new PlayerHands ();
+    blackjackHands.addPlayer("Dealer");
 
     // add sanity check for askName
     //var askName = prompt("What's your name?");
 
-    //blackjackHands.addPlayer("James");
-    var allhands = [];
-    allhands[0] = new Hand("Dealer");
-    allhands[1] = new Hand("James");
+    blackjackHands.addPlayer("James");
+
     //
     // Finished prep, now start playing!
     //
 
-    // show the deck
-
-
     // deal 2 cards into dealer's hand from the deck 
     //(and if you can follow the levels of object recursion in this step without pen and paper, you're a better person than I)
-    //console.log ( blackjackDeck.removeCard() ); 
-    allhands[0].addCard( blackjackDeck.removeCard() ); 
-    allhands[0].addCard( blackjackDeck.removeCard() ); 
+    blackjackHands.hands[0].addCard( blackjackDeck.removeCard() ); 
+    blackjackHands.hands[0].addCard( blackjackDeck.removeCard() ); 
 
     // deal 2 cards into player 1's hand
-    allhands[1].addCard( blackjackDeck.removeCard() ); 
-    allhands[1].addCard( blackjackDeck.removeCard() ); 
-
-    //console.log(blackjackHands.hands[0].cards[1].getNumber());
+    blackjackHands.hands[1].addCard( blackjackDeck.removeCard() ); 
+    blackjackHands.hands[1].addCard( blackjackDeck.removeCard() ); 
 
     // Let's see who got what
-    //allhands[0].showHand();
-    //allhands[1].showHand();
+    blackjackHands.hands[0].showHand();
+    blackjackHands.hands[1].showHand();
 
 
 
