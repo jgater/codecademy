@@ -61,11 +61,6 @@
         this.hands = [];
         var ahand, acard;
         this.addPlayer = function (name) { this.hands.push( new Hand(name) ) };
-        this.addCardToAll = function (acard) { 
-                for (ahand in this.hands) {
-                    this.hands[ahand].addCard ( acard );
-            }
-        };
         this.showAllHands = function () {
             for (ahand in this.hands) {
                 this.hands[ahand].showHand();
@@ -134,18 +129,20 @@
 
     blackjackHands.addPlayer("James");
 
+    blackjackHands.addPlayer("Tim");
+
     //
     // Finished prep, now start playing!
     //
 
     // deal 2 cards into each hand from the deck 
     // Yes, that's a loong chain of objects holding objects.
-    // note also PlayerHands (and its Hand class objects, each with its own Card class objects ) make no reference to objects outside their own chain
-    // the only place our two classes of objects - DeckOfCards and Hand - meet is here, so each class can be used individually later
-    blackjackHands.hands[0].addCard( blackjackDeck.removeCard() );
-    blackjackHands.hands[0].addCard( blackjackDeck.removeCard() );
-    blackjackHands.hands[1].addCard( blackjackDeck.removeCard() );
-    blackjackHands.hands[1].addCard( blackjackDeck.removeCard() );
+    // note also PlayerHands (and its Hand class objects, each with its own Card class objects) make no reference to objects outside their own chain
+    // the only place our two groups of objects - DeckOfCards and Hand - meet is here, so each class can be used individually later
+    for (i in blackjackHands.hands) {
+        blackjackHands.hands[i].addCard( blackjackDeck.removeCard() );
+        blackjackHands.hands[i].addCard( blackjackDeck.removeCard() );
+    }
 
     // Let's see who got what
     blackjackHands.showAllHands();
