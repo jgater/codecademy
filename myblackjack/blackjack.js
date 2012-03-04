@@ -59,7 +59,31 @@
 
     function PlayerHands() {
         this.hands = [];
+        var ahand, acard;
         this.addPlayer = function (name) { this.hands.push( new Hand(name) ) };
+        this.addCardToAll = function (acard) { 
+                for (ahand in this.hands) {
+                    this.hands[ahand].addCard ( acard );
+            }
+        };
+        this.showAllHands = function () {
+            for (ahand in this.hands) {
+                this.hands[ahand].showHand();
+            }
+        };
+        this.showWinner = function () {
+            var winningScore = 0;
+            var winningName = "";
+            for (ahand in this.hands) {
+                var aScore = this.hands[ahand].getScore();
+                if ( aScore > winningScore) {
+                    winningScore = aScore;
+                    winningName = this.hands[ahand].playerName;
+                    // since dealer goes first and wins on a draw, everyone else has to beat him to win
+                }
+            }
+            console.log(winningName + " has won with a final score of " + winningScore + ".");
+        };
     }
 
     function Card(s,n){
@@ -114,18 +138,20 @@
     // Finished prep, now start playing!
     //
 
-    // deal 2 cards into dealer's hand from the deck 
-    //(and if you can follow the levels of object recursion in this step without pen and paper, you're a better person than I)
-    blackjackHands.hands[0].addCard( blackjackDeck.removeCard() ); 
-    blackjackHands.hands[0].addCard( blackjackDeck.removeCard() ); 
-
-    // deal 2 cards into player 1's hand
-    blackjackHands.hands[1].addCard( blackjackDeck.removeCard() ); 
-    blackjackHands.hands[1].addCard( blackjackDeck.removeCard() ); 
+    // deal 2 cards into each hand from the deck 
+    // Yes, that's a loong chain of objects holding objects.
+    // note also PlayerHands (and its Hand class objects, each with its own Card class objects ) make no reference to objects outside their own chain
+    // the only place our two classes of objects - DeckOfCards and Hand - meet is here, so each class can be used individually later
+    blackjackHands.hands[0].addCard( blackjackDeck.removeCard() );
+    blackjackHands.hands[0].addCard( blackjackDeck.removeCard() );
+    blackjackHands.hands[1].addCard( blackjackDeck.removeCard() );
+    blackjackHands.hands[1].addCard( blackjackDeck.removeCard() );
 
     // Let's see who got what
-    blackjackHands.hands[0].showHand();
-    blackjackHands.hands[1].showHand();
+    blackjackHands.showAllHands();
+
+    // let's see who won
+    blackjackHands.showWinner();
 
 
 
